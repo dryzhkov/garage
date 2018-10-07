@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import GarageModel from '../models/GarageModel';
 import VehicleModel from '../models/VehicleModel';
 
+@inject('store')
 @observer
-export class Garage extends React.Component<{ store: GarageModel }, {}> {
+export class Garage extends React.Component<{ store?: GarageModel }, {}> {
   render() {
     return (
       <div>

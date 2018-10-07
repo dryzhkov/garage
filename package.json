@@ -30,6 +30,7 @@
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
     "mobx-react-devtools": "^6.0.3",
+    "office-ui-fabric-react": "^6.79.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2"
   }

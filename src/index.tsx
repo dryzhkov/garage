@@ -1,44 +1,18 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {observable} from 'mobx';
-import {observer} from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 
-class AppState {
-    @observable timer = 0;
+import GarageModel from './models/GarageModel';
+import Garage from './components/Garage';
 
-    constructor() {
-        setInterval(() => {
-            this.timer += 1;
-        }, 1000);
-    }
+const store = new GarageModel();
 
-    resetTimer() {
-        this.timer = 0;
-    }
-}
-
-@observer
-class TimerView extends React.Component<{appState: AppState}, {}> {
-    render() {
-        return (
-            <div>
-                <button onClick={this.onReset}>
-                    Seconds passed: {this.props.appState.timer}
-                </button>
-            </div>
-        );
-     }
-
-     onReset = () => {
-         this.props.appState.resetTimer();
-     }
-};
-
-const appState = new AppState();
 ReactDOM.render(
-    <div>
-        <DevTools />
-        <TimerView appState={appState} />
-    </div>, 
-    document.getElementById('root'));
+  <div>
+    <DevTools />
+    <Garage store={store} />
+  </div>,
+  document.getElementById('root'));
+
+// playing around in the console
+(window as any).store = store;

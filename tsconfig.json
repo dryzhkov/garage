@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["es6", "dom"],
+    "lib": ["es2015", "es2016", "dom"],
     "removeComments": true,
     "experimentalDecorators": true,
     "jsx": "react",

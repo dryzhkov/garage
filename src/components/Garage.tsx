@@ -4,7 +4,7 @@ import GarageModel from '../models/GarageModel';
 import VehicleModel from '../models/VehicleModel';
 
 @observer
-export default class Garage extends React.Component<{ store: GarageModel }, {}> {
+export class Garage extends React.Component<{ store: GarageModel }, {}> {
   render() {
     return (
       <div>

@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import DevTools from 'mobx-react-devtools';
 
 import GarageModel from './models/GarageModel';
-import Garage from './components/Garage';
+import { Garage } from './components/Garage';
 
 const store = new GarageModel();
 

@@ -2,12 +2,12 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import GarageModel from '../models/GarageModel';
 import VehicleModel from '../models/VehicleModel';
-import ReminderModel from '../models/ReminderModel';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
+import ServiceRecordModel from '../models/ServiceRecordModel';
 
-interface AddReminderProps {
+interface AddServiceRecordProps {
   selectedVehicle: VehicleModel;
   onAdd: Function;
   onClose: Function;
@@ -17,15 +17,16 @@ interface AddReminderProps {
 
 @inject('store')
 @observer
-export class AddReminder extends React.Component<AddReminderProps, {}> {
-  private notes: string;
+export class AddServiceRecord extends React.Component<AddServiceRecordProps, {}> {
   private selectedDate: Date;
+  private title: string;
+  private description: string;
 
   render() {
     if (this.props.visible) {
       return (
         <div>
-          <h1>Add New Reminder</h1>
+          <h1>Add New Service Record</h1>
           <div>
           <DatePicker
             label="Date"
@@ -37,16 +38,23 @@ export class AddReminder extends React.Component<AddReminderProps, {}> {
           </div>
           <div>
             <TextField 
-              label="Notes" 
-              multiline rows={3} 
-              onChange={this.notesChanged} 
-              value={this.notes}
+              label="Title" 
+              onChange={this.titleChanged} 
+              value={this.title}
+            />
+          </div>
+          <div>
+            <TextField 
+              label="Description"
+              placeholder="This is optional"
+              onChange={this.descriptionChanged} 
+              value={this.description}
             />
           </div>
           <div>
             <PrimaryButton 
               text="Add"
-              onClick={this.addReminder}
+              onClick={this.addServiceRecord}
               style={{width:150, height:30}}
             />
             <DefaultButton 
@@ -62,17 +70,26 @@ export class AddReminder extends React.Component<AddReminderProps, {}> {
     }
   }
 
-  notesChanged = (_, newValue) => {
-    this.notes = newValue;
+  titleChanged = (_, newValue: string) => {
+    this.title = newValue;
   }
 
   dateSelected = (date: Date) => {
     this.selectedDate = date;
   }
 
-  addReminder = () => {
-    if (this.selectedDate && this.notes && this.notes.length > 0) {
-      this.props.selectedVehicle!.addReminder(new ReminderModel(this.selectedDate, this.notes))
+  descriptionChanged = (_, newValue: string) => {
+    this.description = newValue;
+  }
+
+  addServiceRecord = () => {
+    if (this.selectedDate 
+      && this.title 
+      && this.title.length > 0) {
+
+      this.props
+        .selectedVehicle!
+        .addServiceRecord(new ServiceRecordModel(this.selectedDate, this.title, this.description))
       this.clear();
       this.props.onAdd();
     }
@@ -84,7 +101,8 @@ export class AddReminder extends React.Component<AddReminderProps, {}> {
   }
 
   private clear() {
-    this.notes = "";
+    this.title = "";
+    this.description = "";
     this.selectedDate = null;
   }
 }

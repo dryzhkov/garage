@@ -1,80 +1,93 @@
 import * as React from 'react';
 import { action, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { DefaultButton, IconButton, CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import GarageModel from '../models/GarageModel';
 import VehicleModel from '../models/VehicleModel';
 import { RemindersList } from './RemindersList';
 import { ServiceRecordsList } from './ServiceRecordsList';
 import { AddReminder } from './AddReminder';
-import ReminderModel from '../models/ReminderModel';
-import ServiceRecordModel from '../models/ServiceRecordModel';
+import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
+import { AddServiceRecord } from './AddServiceRecord';
+import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+
+interface GarageProps { 
+  store?: GarageModel;
+}
 
 @inject('store')
 @observer
-export class Garage extends React.Component<{ store?: GarageModel }, {}> {
+export class Garage extends React.Component<GarageProps, {}> {
   @observable private selectedVehicle: VehicleModel;
-  @observable private addReminderVisibility: boolean;
+  @observable private addReminderVisible: boolean;
+  @observable private addServiceRecordVisible: boolean;
 
   render() {
     const { store } = this.props;
-    const dropdownOptions = store.vehicles.map(vehicle => {
-      return {
-        key: vehicle.id,
-        text: vehicle.make
-      };
+
+    if (!this.selectedVehicle && store && store.vehicles.length) {
+      this.selectedVehicle = store.vehicles[0];
+    } 
+
+    const vehicleLinks = store.vehicles.map(vehicle => {
+      return <PivotItem key={vehicle.id} itemKey={vehicle.id} linkText={vehicle.make} />;
     });
 
-    const reminders = 
-      this.selectedVehicle ? 
-        <RemindersList selectedVehicle={this.selectedVehicle}/> : null;
+    const reminders = this.selectedVehicle ? <RemindersList selectedVehicle={this.selectedVehicle} /> : null;
 
-    const serviceRecords = 
-      this.selectedVehicle ? 
-        <ServiceRecordsList selectedVehicle={this.selectedVehicle}/> : null;
+    const serviceRecords = this.selectedVehicle ? <ServiceRecordsList selectedVehicle={this.selectedVehicle} /> : null;
 
     return (
-      <div>
-        <DefaultButton
+      <Fabric>
+        <CommandBarButton
+          disabled={!this.selectedVehicle}
+          onClick={this.addReminder}
+          iconProps={{ iconName: 'Clock' }}
+          text="Add Reminder"
+          style={{ width: 150, height: 30 }}
+        />
+
+        <CommandBarButton
+          disabled={!this.selectedVehicle}
+          onClick={this.addServiceRecord}
+          iconProps={{ iconName: 'Add' }}
+          text="Add Service Record"
+          style={{ width: 150, height: 30 }}
+        />
+
+        <CommandBarButton
           text="Add Vehicle"
           onClick={this.addVehicle}
-          style={{width:150, height:30}}
+          iconProps={{ iconName: 'Car' }}
+          style={{ width: 150, height: 30 }}
         />
 
-        <CommandBarButton
-            disabled={!this.selectedVehicle}
-            onClick={this.addReminder}
-            iconProps={{ iconName: 'AlarmClock' }}
-            text="Add Reminder"
-            style={{width:150, height:30}}
-          />
-
-        <CommandBarButton
-            disabled={!this.selectedVehicle}
-            onClick={this.addServiceRecord}
-            iconProps={{ iconName: 'Add' }}
-            text="Add Service Record"
-            style={{width:150, height:30}}
-          />
-
-        <Dropdown
-          label="Garage:"
-          selectedKey={this.selectedVehicle ? this.selectedVehicle.id : undefined}
-          onChanged={this.vehicleChanged}
-          placeHolder="Select a Vehicle"
-          options={dropdownOptions}
-        />
+        <div>
+          <h2>Garage:</h2>
+          <Pivot linkSize={PivotLinkSize.large} onLinkClick={this.vehicleChanged}>
+            {vehicleLinks}
+          </Pivot>
+        </div>
 
         {reminders}
         {serviceRecords}
 
-        <AddReminder 
-          selectedVehicle={this.selectedVehicle} 
-          visible={this.addReminderVisibility} 
+        <AddReminder
+          selectedVehicle={this.selectedVehicle}
+          visible={this.addReminderVisible}
+          onAdd={this.closeAddReminder}
           onClose={this.closeAddReminder}
         />
-      </div>
+
+        <AddServiceRecord
+          selectedVehicle={this.selectedVehicle}
+          visible={this.addServiceRecordVisible}
+          onAdd={this.closeAddServiceRecord}
+          onClose={this.closeAddServiceRecord}
+        />
+
+        <div>Selected: {this.selectedVehicle ? this.selectedVehicle.make : 'none'}</div>
+      </Fabric>
     );
   }
 
@@ -87,25 +100,28 @@ export class Garage extends React.Component<{ store?: GarageModel }, {}> {
 
   @action
   addReminder = () => {
-    if (this.selectedVehicle) {
-      this.addReminderVisibility = true;
-    }
+    this.addReminderVisible = true;
   }
 
   @action
   closeAddReminder = () => {
-    this.addReminderVisibility = false;
+    this.addReminderVisible = false;
   }
 
   @action
   addServiceRecord = () => {
-    if (this.selectedVehicle) {
-      this.selectedVehicle.addServiceRecord(new ServiceRecordModel(new Date(), 'Changed Oil', '0w30'));
-    }
+    this.addServiceRecordVisible = true;
   }
 
   @action
-  vehicleChanged = (item: IDropdownOption, index?: number): void => {
-    this.selectedVehicle = this.props.store!.vehicles[index];
+  closeAddServiceRecord = () => {
+    this.addServiceRecordVisible = false;
+  }
+
+  @action
+  vehicleChanged = (item: PivotItem): void => {
+    this.selectedVehicle = this.props.store!.vehicles.find((vehicle) => {
+      return vehicle.id === item.props.itemKey;
+    });
   }
 };

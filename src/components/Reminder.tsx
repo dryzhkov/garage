@@ -8,7 +8,7 @@ interface ReminderProps {
 const Reminder = (props: ReminderProps) => {
   const { reminder } = props;
   return <div>
-    { `Date: ${reminder.date} ~ Notes: ${reminder.notes}` }
+    { `Date: ${reminder.date.toDateString()} ~ Notes: ${reminder.notes}` }
   </div>
 };
 

@@ -7,6 +7,7 @@ import GarageModel from '../models/GarageModel';
 import VehicleModel from '../models/VehicleModel';
 import { RemindersList } from './RemindersList';
 import { ServiceRecordsList } from './ServiceRecordsList';
+import { AddReminder } from './AddReminder';
 import ReminderModel from '../models/ReminderModel';
 import ServiceRecordModel from '../models/ServiceRecordModel';
 
@@ -14,6 +15,7 @@ import ServiceRecordModel from '../models/ServiceRecordModel';
 @observer
 export class Garage extends React.Component<{ store?: GarageModel }, {}> {
   @observable private selectedVehicle: VehicleModel;
+  @observable private addReminderVisibility: boolean;
 
   render() {
     const { store } = this.props;
@@ -66,6 +68,12 @@ export class Garage extends React.Component<{ store?: GarageModel }, {}> {
 
         {reminders}
         {serviceRecords}
+
+        <AddReminder 
+          selectedVehicle={this.selectedVehicle} 
+          visible={this.addReminderVisibility} 
+          onClose={this.closeAddReminder}
+        />
       </div>
     );
   }
@@ -79,11 +87,14 @@ export class Garage extends React.Component<{ store?: GarageModel }, {}> {
 
   @action
   addReminder = () => {
-    
-    
     if (this.selectedVehicle) {
-      this.selectedVehicle.addReminder(new ReminderModel(new Date(), 'Change Oil in 6 months'))
+      this.addReminderVisibility = true;
     }
+  }
+
+  @action
+  closeAddReminder = () => {
+    this.addReminderVisibility = false;
   }
 
   @action

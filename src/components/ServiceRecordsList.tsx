@@ -19,7 +19,7 @@ export class ServiceRecordsList extends React.Component<ServiceRecordsListProps,
       <div>
         Service Records:
         { selectedVehicle.serviceRecords.map(record => {
-            return <ServiceRecord record={record} />
+            return <ServiceRecord key={record.id} record={record} />
         })}
       </div>
     );

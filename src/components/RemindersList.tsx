@@ -5,8 +5,8 @@ import VehicleModel from '../models/VehicleModel';
 import { Reminder } from './Reminder';
 
 interface RemindersListProps {
-  selectedVehicle: VehicleModel,
-  store?: GarageModel
+  selectedVehicle: VehicleModel;
+  store?: GarageModel;
 }
 
 @inject('store')
@@ -19,7 +19,7 @@ export class RemindersList extends React.Component<RemindersListProps, {}> {
       <div>
         Reminders:
         { selectedVehicle.reminders.map(reminder => {
-            return <Reminder reminder={reminder} />
+            return <Reminder key={reminder.id} reminder={reminder} />
         })}
       </div>
     );

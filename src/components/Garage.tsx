@@ -39,6 +39,16 @@ export class Garage extends React.Component<GarageProps, {}> {
 
     return (
       <Fabric>
+        <div>
+          <h1>Garage</h1>
+          <Pivot linkSize={PivotLinkSize.large} onLinkClick={this.vehicleChanged}>
+            {vehicleLinks}
+          </Pivot>
+        </div>
+
+        {reminders}
+        {serviceRecords}
+
         <CommandBarButton
           disabled={!this.selectedVehicle}
           onClick={this.addReminder}
@@ -61,16 +71,6 @@ export class Garage extends React.Component<GarageProps, {}> {
           iconProps={{ iconName: 'Car' }}
           style={{ width: 150, height: 30 }}
         />
-
-        <div>
-          <h2>Garage:</h2>
-          <Pivot linkSize={PivotLinkSize.large} onLinkClick={this.vehicleChanged}>
-            {vehicleLinks}
-          </Pivot>
-        </div>
-
-        {reminders}
-        {serviceRecords}
 
         <AddReminder
           selectedVehicle={this.selectedVehicle}

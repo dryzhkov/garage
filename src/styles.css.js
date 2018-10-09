@@ -5,7 +5,7 @@ const header = {
 
 const headerBorder = {
   backgroundColor: '#333',
-  height: '4px',
+  height: '2px',
   marginTop: '10px',
   marginBottom: '10px'
 }

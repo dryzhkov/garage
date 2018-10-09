@@ -11,6 +11,8 @@ import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivo
 import { AddServiceRecord } from './AddServiceRecord';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 
+import styles from '../styles.css.js';
+
 interface GarageProps { 
   store?: GarageModel;
 }
@@ -39,54 +41,59 @@ export class Garage extends React.Component<GarageProps, {}> {
 
     return (
       <Fabric>
-        <div>
-          <h1>Garage</h1>
-          <Pivot linkSize={PivotLinkSize.large} onLinkClick={this.vehicleChanged}>
-            {vehicleLinks}
-          </Pivot>
+        <div style={styles.header}>
+          <h1>My Garage</h1>
         </div>
+        <div style={styles.headerBorder}></div>
 
-        {reminders}
-        {serviceRecords}
+        <div style={styles.container}>
+          <div style={styles.left}>
+            <Pivot linkSize={PivotLinkSize.large} onLinkClick={this.vehicleChanged}>
+              {vehicleLinks}
+            </Pivot>
+            {reminders}
+            {serviceRecords}
+          </div>
+          <div style={styles.right}>
+            <CommandBarButton
+              disabled={!this.selectedVehicle}
+              onClick={this.addReminder}
+              iconProps={{ iconName: 'Clock' }}
+              text="Add Reminder"
+              style={{ width: 150, height: 30 }}
+            />
 
-        <CommandBarButton
-          disabled={!this.selectedVehicle}
-          onClick={this.addReminder}
-          iconProps={{ iconName: 'Clock' }}
-          text="Add Reminder"
-          style={{ width: 150, height: 30 }}
-        />
+            <CommandBarButton
+              disabled={!this.selectedVehicle}
+              onClick={this.addServiceRecord}
+              iconProps={{ iconName: 'Add' }}
+              text="Add Service Record"
+              style={{ width: 150, height: 30 }}
+            />
 
-        <CommandBarButton
-          disabled={!this.selectedVehicle}
-          onClick={this.addServiceRecord}
-          iconProps={{ iconName: 'Add' }}
-          text="Add Service Record"
-          style={{ width: 150, height: 30 }}
-        />
+            <CommandBarButton
+              text="Add Vehicle"
+              onClick={this.addVehicle}
+              iconProps={{ iconName: 'Car' }}
+              style={{ width: 150, height: 30 }}
+            />
 
-        <CommandBarButton
-          text="Add Vehicle"
-          onClick={this.addVehicle}
-          iconProps={{ iconName: 'Car' }}
-          style={{ width: 150, height: 30 }}
-        />
+            <AddReminder
+              selectedVehicle={this.selectedVehicle}
+              visible={this.addReminderVisible}
+              onAdd={this.closeAddReminder}
+              onClose={this.closeAddReminder}
+            />
 
-        <AddReminder
-          selectedVehicle={this.selectedVehicle}
-          visible={this.addReminderVisible}
-          onAdd={this.closeAddReminder}
-          onClose={this.closeAddReminder}
-        />
-
-        <AddServiceRecord
-          selectedVehicle={this.selectedVehicle}
-          visible={this.addServiceRecordVisible}
-          onAdd={this.closeAddServiceRecord}
-          onClose={this.closeAddServiceRecord}
-        />
-
-        <div>Selected: {this.selectedVehicle ? this.selectedVehicle.make : 'none'}</div>
+            <AddServiceRecord
+              selectedVehicle={this.selectedVehicle}
+              visible={this.addServiceRecordVisible}
+              onAdd={this.closeAddServiceRecord}
+              onClose={this.closeAddServiceRecord}
+            />
+          </div>
+        </div>
+        
       </Fabric>
     );
   }

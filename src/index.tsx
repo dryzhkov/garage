@@ -6,7 +6,6 @@ import GarageModel from './models/GarageModel';
 import { Garage } from './components/Garage';
 import VehicleModel from './models/VehicleModel';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import './index.css';
 
 const store = new GarageModel();
 store.addVehicle(new VehicleModel('Mazda 3'));

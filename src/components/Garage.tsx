@@ -60,7 +60,7 @@ export class Garage extends React.Component<GarageProps, {}> {
               onClick={this.addReminder}
               iconProps={{ iconName: 'Clock' }}
               text="Add Reminder"
-              style={{ width: 150, height: 30 }}
+              style={styles.actionButton}
             />
 
             <CommandBarButton
@@ -68,14 +68,14 @@ export class Garage extends React.Component<GarageProps, {}> {
               onClick={this.addServiceRecord}
               iconProps={{ iconName: 'Add' }}
               text="Add Service Record"
-              style={{ width: 150, height: 30 }}
+              style={styles.actionButton}
             />
 
             <CommandBarButton
               text="Add Vehicle"
               onClick={this.addVehicle}
               iconProps={{ iconName: 'Car' }}
-              style={{ width: 150, height: 30 }}
+              style={styles.actionButton}
             />
 
             <AddReminder
@@ -108,6 +108,7 @@ export class Garage extends React.Component<GarageProps, {}> {
   @action
   addReminder = () => {
     this.addReminderVisible = true;
+    this.addServiceRecordVisible = false;
   }
 
   @action
@@ -118,6 +119,7 @@ export class Garage extends React.Component<GarageProps, {}> {
   @action
   addServiceRecord = () => {
     this.addServiceRecordVisible = true;
+    this.addReminderVisible = false;
   }
 
   @action

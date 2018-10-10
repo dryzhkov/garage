@@ -20,18 +20,36 @@ const container = {
 
 const left = {
   padding: '1em',
-  backgroundColor: '#337ab7',
+  backgroundColor: '#5cb85c',
   textAlign: 'left',
   marginRight: 'auto'
 }
 
 const right = {
   padding: '1em',
-  backgroundColor: '#5cb85c',
+  backgroundColor: '#337ab7',
   textAlign: 'left'
 }
 
+const actionButton = {
+  width: '175px', 
+  height: '30px'
+}
+
+const button = {
+  width: '150px', 
+  height: '30px',
+  marginRight: '2em'
+}
+
+const buttonWrapper = {
+  marginTop:'2em'
+}
+
 export default { 
+  actionButton,
+  button,
+  buttonWrapper,
   header,
   headerBorder,
   container,

@@ -6,6 +6,7 @@ import ReminderModel from '../models/ReminderModel';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
+import styles from '../styles.css.js';
 
 interface AddReminderProps {
   selectedVehicle: VehicleModel;
@@ -43,16 +44,16 @@ export class AddReminder extends React.Component<AddReminderProps, {}> {
               value={this.notes}
             />
           </div>
-          <div>
-            <PrimaryButton 
+          <div style={styles.buttonWrapper}>
+            <DefaultButton 
               text="Add"
               onClick={this.addReminder}
-              style={{width:150, height:30}}
+              style={styles.button}
             />
             <DefaultButton 
               text="Close"
               onClick={this.close}
-              style={{width:150, height:30}}
+              style={styles.button}
             />
           </div>
         </div>

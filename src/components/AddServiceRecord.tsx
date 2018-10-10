@@ -6,6 +6,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
 import ServiceRecordModel from '../models/ServiceRecordModel';
+import styles from '../styles.css.js';
 
 interface AddServiceRecordProps {
   selectedVehicle: VehicleModel;
@@ -51,16 +52,16 @@ export class AddServiceRecord extends React.Component<AddServiceRecordProps, {}>
               value={this.description}
             />
           </div>
-          <div>
-            <PrimaryButton 
+          <div style={styles.buttonWrapper}>
+            <DefaultButton 
               text="Add"
               onClick={this.addServiceRecord}
-              style={{width:150, height:30}}
+              style={styles.button}
             />
             <DefaultButton 
               text="Close"
               onClick={this.close}
-              style={{width:150, height:30}}
+              style={styles.button}
             />
           </div>
         </div>

@@ -32,7 +32,7 @@ const resolvers = {
       const { vehicleId, date, title, description } = args;
 
       if (!vehicleId || !date || !title) {
-        throw new Error('Invalid payload: vehicleId, date and title are required');
+        throw new Error('Invalid payload: vehicleId, date and title must be valid');
       }
       return Vehicle.findOne({ _id: vehicleId })
         .then(vehicle => {

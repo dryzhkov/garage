@@ -1,20 +1,20 @@
 const typeDefs = [`
   type Vehicle {
-    _id: String
+    id: String
     make: String
     serviceRecords: [ServiceRecord]
     reminders: [Reminder]
   }
 
   type ServiceRecord {
-    _id: String
+    id: String
     date: String
     title: String
     description: String
   }
 
   type Reminder {
-    _id: String
+    id: String
     date: String
     notes: String
   }

@@ -1,9 +1,12 @@
 const Vehicle = require('../db/models/Vehicle');
+const { ReadPreference } = require('mongodb');
 
 const resolvers = {
   Query: {
     vehicles: () => {
-      return Vehicle.find();
+      return Vehicle.find({})
+        .read(ReadPreference.NEAREST)
+        .exec();
     },
   },
   Vehicle: {
@@ -25,8 +28,25 @@ const resolvers = {
     createReminder: () => {
       return null;
     },
-    createServiceRecord: () => {
-      return null
+    createServiceRecord: (root, args, context, info) => {
+      const { vehicleId, date, title, description } = args;
+
+      if (!vehicleId || !date || !title) {
+        throw new Error('Invalid payload: vehicleId, date and title are required');
+      }
+      return Vehicle.findOne({ _id: vehicleId })
+        .then(vehicle => {
+          vehicle.serviceRecords.push(
+            {
+              date,
+              title,
+              description
+            }
+          );
+
+          return vehicle.save()
+            .then(v => v.serviceRecords.pop());
+        });
     }
   }
 };

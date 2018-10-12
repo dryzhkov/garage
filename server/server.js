@@ -15,7 +15,7 @@ const HOME_PATH = '/graphiql';
 const URL = 'http://localhost';
 const PORT = 3001;
 
-const start = async () => {
+const start = () => {
   mongo.connect();
 
   const schema = makeExecutableSchema({

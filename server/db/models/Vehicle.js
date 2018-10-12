@@ -6,7 +6,7 @@ const VehicleSchema = new Schema({
   serviceRecords: [{
     date: Date,
     title: String,
-    escription: String
+    description: String
   }],
   reminders: [{
     date: Date,

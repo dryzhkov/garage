@@ -10,7 +10,6 @@ function connect() {
   });
 
   return mongoose.connect(mongoURL, {
-    // useMongoClient: true,
     useNewUrlParser: true,
     user: env.user,
     pass: env.pwd

@@ -26,7 +26,9 @@ const typeDefs = [`
   type Mutation {
     createVehicle(make: String): Vehicle
     createServiceRecord(vehicleId: String, date: String, title: String, description: String): ServiceRecord
+    deleteServiceRecord(vehicleId: String, recordId: String): String
     createReminder(vehicleId: String, date: String, notes: String): Reminder
+    deleteReminder(vehicleId: String, reminderId: String): String
   }
 
   schema {

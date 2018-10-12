@@ -6,7 +6,6 @@ const { makeExecutableSchema } = require('graphql-tools');
 const cors = require('cors');
 const typeDefs = require('./graphql/type-defs');
 const resolvers = require('./graphql/resolvers');
-const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -30,11 +29,11 @@ const start = () => {
   }));
 
   app.get('/',(req,res)=>{
-    res.sendFile(__dirname + '/public/index.html')
+    res.sendFile(__dirname + '/public/index.html');
    })
 
   app.listen(PORT, () => {
-    console.log(`Visit ${URL}:${PORT}${HOME_PATH}`)
+    console.log(`Visit ${URL}:${PORT}${HOME_PATH}`);
   });
 };
 

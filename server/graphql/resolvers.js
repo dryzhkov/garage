@@ -10,11 +10,11 @@ const resolvers = {
     },
   },
   Vehicle: {
-    reminders: () => {
-      return [{ id:'1111', date: 'time', notes: 'Dont forget to change oil'}];
+    reminders: ({_id}) => {
+      return Vehicle.findOne({ _id }).then(v => v.reminders);
     },
-    serviceRecords: () => {
-      return [{ id:'123', date: 'time', title: 'Oil Change', description: ''}]
+    serviceRecords: ({_id}) => {
+      return Vehicle.findOne({ _id }).then(v => v.serviceRecords);
     }
   },
   Mutation: {

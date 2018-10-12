@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Simple app for keeping track of vechicle maintenance records",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server/server.dev.js",
+    "dev": "concurrently \"react-scripts start\" \"nodemon server/server.js\""
   },
   "repository": {
     "type": "git",

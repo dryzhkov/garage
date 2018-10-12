@@ -5,10 +5,10 @@
     "removeComments": true,
     "experimentalDecorators": true,
     "jsx": "react",
-    "outDir": "dist"
+    "outDir": "./server/public"
   },
   "exclude": [
     "node_modules",
-    "static"
+    "server"
   ]
 }

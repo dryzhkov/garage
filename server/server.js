@@ -12,7 +12,7 @@ app.use(cors());
 
 const HOME_PATH = '/graphiql';
 const URL = 'http://localhost';
-const PORT = 3001;
+const PORT = 3000;
 
 const start = () => {
   mongo.connect();
@@ -22,15 +22,19 @@ const start = () => {
     resolvers
   });
 
+  app.use(express.static('public'));
   app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
-
   app.use(HOME_PATH, graphiqlExpress({
     endpointURL: '/graphql'
   }));
 
-  app.get('/',(req,res)=>{
-    res.sendFile(__dirname + '/public/index.html');
-   })
+  // app.get('/', (req, res) => {
+  //   res.sendFile(__dirname + '/public/index.html');
+  // });
+
+  app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html', { root: global });
+  });
 
   app.listen(PORT, () => {
     console.log(`Visit ${URL}:${PORT}${HOME_PATH}`);

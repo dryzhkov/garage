@@ -1,100 +1,41 @@
-const Hapi = require('hapi');
-const { ApolloServer, gql } = require('apollo-server-hapi');
-const schema = require('./graphql/schema');
-const Vehicle = require('./db/models/Vehicle');
 const mongo = require('./db/mongo');
+const express = require('express');
+const bodyParser = require('body-parser');
+const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
+const { makeExecutableSchema } = require('graphql-tools');
+const cors = require('cors');
+const typeDefs = require('./graphql/type-defs');
+const resolvers = require('./graphql/resolvers');
+const path = require('path');
 
-mongo.connect();
+const app = express();
+app.use(cors());
 
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling',
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton',
-  },
-];
+const HOME_PATH = '/graphiql';
+const URL = 'http://localhost';
+const PORT = 3001;
 
-const typeDefs = gql`
-  # Comments in GraphQL are defined with the hash (#) symbol.
+const start = async () => {
+  mongo.connect();
 
-  # This "Book" type can be used in other type declarations.
-  type Book {
-    title: String
-    author: String
-  }
-
-  # The "Query" type is the root of all GraphQL queries.
-  # (A "Mutation" type will be covered later on.)
-  type Query {
-    books: [Book]
-  }
-`;
-
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
-
-const init = async () => {
-  const server = new ApolloServer({ schema }); // new ApolloServer({ typeDefs, resolvers });
-
-  const app = new Hapi.server({
-    port: 4000
+  const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers
   });
 
-  await server.applyMiddleware({
-    app,
+  app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+
+  app.use(HOME_PATH, graphiqlExpress({
+    endpointURL: '/graphql'
+  }));
+
+  app.get('/',(req,res)=>{
+    res.sendFile(__dirname + '/public/index.html')
+   })
+
+  app.listen(PORT, () => {
+    console.log(`Visit ${URL}:${PORT}${HOME_PATH}`)
   });
-
-  await server.installSubscriptionHandlers(app.listener);
-
-  app.route([
-    {
-      method: 'GET',
-      path: '/api/v1/vehicles',
-      config: {
-        description: 'Get all the vehicles',
-        tags: ['api', 'v1', 'vehicles']
-      },
-      handler: (req, reply) => {
-        return Vehicle.find();
-      }
-    },
-    {
-      method: 'POST',
-      path: '/api/v1/vehicles',
-      config: {
-        description: 'Create a vehicle.',
-        tags: ['api', 'v1', 'vehicle']
-      },
-      handler: (req, reply) => {
-        const { make } = req.payload;
-        const vehicle = new Vehicle({
-          make
-        });
-
-        if (make) {
-          return vehicle.save();
-        } else {
-          return reply.response({ error: 'make is required' }).code(400);
-        }
-      }
-    },
-    {
-      method: 'GET',
-      path: '/{param*}',
-      handler: {
-        file: '/public/index.html'
-      }
-    }
-  ]);
-
-  await app.start();
-  console.log(`Server running at: ${app.info.uri}`);
 };
 
 process.on('unHandledRejection', (err) => {
@@ -104,4 +45,4 @@ process.on('unHandledRejection', (err) => {
   }
 });
 
-init().catch(error => console.log(error));
+start();

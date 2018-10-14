@@ -37,7 +37,8 @@ const start = () => {
   });
 
   app.listen(PORT, () => {
-    console.log(`Visit ${URL}:${PORT}${HOME_PATH}`);
+    console.log(`Go to ${URL}:${PORT}${HOME_PATH} for GraphQL endpoint`);
+    console.log(`Go to ${URL}:${PORT} for front-end website`);
   });
 };
 

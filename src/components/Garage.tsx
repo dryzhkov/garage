@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import GarageModel from '../models/GarageModel';
@@ -10,7 +10,6 @@ import { AddReminder } from './AddReminder';
 import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
 import { AddServiceRecord } from './AddServiceRecord';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
-
 import styles from '../styles.css.js';
 
 interface GarageProps { 
@@ -28,7 +27,9 @@ export class Garage extends React.Component<GarageProps, {}> {
     const { store } = this.props;
 
     if (!this.selectedVehicle && store && store.vehicles.length) {
-      this.selectedVehicle = store.vehicles[0];
+      runInAction(() => {
+        this.selectedVehicle = store.vehicles[0];
+      });
     } 
 
     const vehicleLinks = store.vehicles.map(vehicle => {
@@ -93,7 +94,6 @@ export class Garage extends React.Component<GarageProps, {}> {
             />
           </div>
         </div>
-        
       </Fabric>
     );
   }

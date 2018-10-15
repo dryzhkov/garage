@@ -43,16 +43,16 @@ export default class GarageModel {
       runInAction(() => {
         this.vehicles = vehiclesDto.map(dto => {
           const reminders = dto.reminders.map(r => {
-            return new ReminderModel(new Date(parseInt(r.date)), r.notes);
+            return new ReminderModel(r.id, new Date(parseInt(r.date)), r.notes);
           });
 
           const serviceRecords = dto.serviceRecords.map(sr => {
-            return new ServiceRecordModel(new Date(parseInt(sr.date)), sr.title, sr.description);
+            return new ServiceRecordModel(sr.id, new Date(parseInt(sr.date)), sr.title, sr.description);
           });
 
-          return new VehicleModel(dto.make, reminders, serviceRecords);
+          return new VehicleModel(dto.id, dto.make, reminders, serviceRecords);
         });
-      })
+      });
     } catch (error) {
       runInAction(() => {
         console.log(error);

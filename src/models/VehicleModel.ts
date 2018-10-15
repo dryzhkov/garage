@@ -1,5 +1,4 @@
-import {observable, action, computed, runInAction} from 'mobx';
-import * as cuid from 'cuid';
+import { observable, action, computed, runInAction } from 'mobx';
 import ServiceRecordModel from './ServiceRecordModel';
 import ReminderModel from './ReminderModel';
 import gql from 'graphql-tag';
@@ -11,8 +10,8 @@ export default class VehicleModel {
   @observable public serviceRecords: ServiceRecordModel[];
   @observable public reminders: ReminderModel[];
 
-  constructor(make: string, reminders: ReminderModel[] = [], serviceRecords: ServiceRecordModel[] = []) {
-    this.id = cuid();
+  constructor(id: string, make: string, reminders: ReminderModel[] = [], serviceRecords: ServiceRecordModel[] = []) {
+    this.id = id;
     this.make = make;
     this.reminders = reminders;
     this.serviceRecords = serviceRecords;
@@ -23,35 +22,107 @@ export default class VehicleModel {
     return `[id: ${this.id}, make: ${this.make}]`;
   }
 
-  @action 
-  public addServiceRecord(record: ServiceRecordModel) {
-    this.serviceRecords.push(record);
-  }
-
-  @action 
-  public async addReminder(reminder: ReminderModel) {
-      const mutation = gql`
-        mutation{
-          createReminder(
-            vehicleId:"${this.id}",
-            date: "${reminder.date.toDateString()}",
-            notes: "${reminder.notes}"
-          ) {
-            id,
-            date,
-            notes
-          }
+  @action
+  public async addServiceRecord(date: Date, title: string, description: string = "") {
+    const mutation = gql`
+      mutation{
+        createServiceRecord(
+          vehicleId:"${this.id}",
+          date: "${date.toDateString()}",
+          title: "${title}",
+          description: "${description}"
+        ) {
+          id,
+          date,
+          title,
+          description
         }
-      `;
+      }
+    `;
 
-    await client
-      .mutate({ mutation: mutation})
+    const dto = await client
+      .mutate({ mutation: mutation })
       .then((res) => {
-        console.log("RES", res)
-        return res;
+        return res.data.createServiceRecord;
       });
     runInAction(() => {
-      this.reminders.push(reminder);
-    })
+      this.serviceRecords.push(
+        new ServiceRecordModel(dto.id, new Date(parseInt(dto.date)), dto.title, dto.description
+      ));
+    });
+  }
+
+  @action
+  public async addReminder(date: Date, notes: string) {
+    const mutation = gql`
+      mutation{
+        createReminder(
+          vehicleId:"${this.id}",
+          date: "${date.toDateString()}",
+          notes: "${notes}"
+        ) {
+          id,
+          date,
+          notes
+        }
+      }
+    `;
+
+    const dto = await client
+      .mutate({ mutation: mutation })
+      .then((res) => {
+        return res.data.createReminder;
+      });
+    runInAction(() => {
+      this.reminders.push(new ReminderModel(dto.id, new Date(parseInt(dto.date)), dto.notes));
+    });
+  }
+
+  @action
+  public async deleteServiceRecord(recordId: string) {
+    const mutation = gql`
+      mutation{
+        deleteServiceRecord(
+          vehicleId:"${this.id}",
+          recordId: "${recordId}"
+        )
+      }
+    `;
+
+    const deletedId = await client
+      .mutate({ mutation: mutation })
+      .then((res) => {
+        return res.data.deleteServiceRecord;
+      });
+
+    if (deletedId) {
+      runInAction(() => {
+        this.serviceRecords = this.serviceRecords.filter(sr => sr.id !== deletedId);
+      });
+    }
+  }
+
+  @action
+  public async deleteReminder(reminder: ReminderModel) {
+    const mutation = gql`
+      mutation{
+        deleteReminder(
+          vehicleId:"${this.id}",
+          reminderId: "${reminder.id}"
+        )
+      }
+    `;
+
+    const deletedId = await client
+      .mutate({ mutation: mutation })
+      .then((res) => {
+        return res.data.deleteReminder;
+      });
+
+    if (deletedId) {
+      runInAction(() => {
+        this.reminders = this.reminders.filter(r => r.id !== deletedId);
+      });
+    }
   }
 }

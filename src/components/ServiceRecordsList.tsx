@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { observer, inject} from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import GarageModel from '../models/GarageModel';
 import VehicleModel from '../models/VehicleModel';
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import ServiceRecordModel from '../models/ServiceRecordModel';
 
 interface ServiceRecordsListProps {
   selectedVehicle: VehicleModel,
@@ -33,13 +35,26 @@ const columns: IColumn[] = [
     minWidth: 100,
     maxWidth: 200,
     isResizable: true
+  },
+  {
+    key: 'column4',
+    name: '',
+    fieldName: 'delete',
+    minWidth: 50,
+    maxWidth: 50,
+    isResizable: false
   }
 ];
 
 @inject('store')
 @observer
 export class ServiceRecordsList extends React.Component<ServiceRecordsListProps, {}> {
-  
+  private selectedRecordId: string;
+
+  constructor(props) {
+    super(props);
+    this.renderItemColumn = this.renderItemColumn.bind(this);
+  }
   render() {
     const { selectedVehicle } = this.props;
     const listItems = selectedVehicle.serviceRecords.map(record => {
@@ -55,18 +70,33 @@ export class ServiceRecordsList extends React.Component<ServiceRecordsListProps,
       <div>
         <h2>Service Records:</h2>
         <DetailsList
-            items={listItems}
-            selectionMode={SelectionMode.none}
-            columns={columns}
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.fixedColumns}
-            onItemInvoked={this._onItemInvoked}
-          />
+          items={listItems}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          setKey="set"
+          layoutMode={DetailsListLayoutMode.fixedColumns}
+          onRenderItemColumn={this.renderItemColumn}
+        />
       </div>
     );
   }
 
-  private _onItemInvoked(item: any): void {
-    alert(`Item invoked: ${item.name}`);
+  private renderItemColumn(item: any, index: number, column: IColumn) {
+    const fieldContent = item[column.fieldName || ''];
+    
+    switch (column.fieldName) {
+      case 'delete':
+        return <IconButton
+          disabled={false}
+          iconProps={{ iconName: 'LogRemove' }}
+          label="Remove"
+          onClick={() => { 
+            this.props.selectedVehicle.deleteServiceRecord(item.key) 
+          }}
+        />
+
+      default:
+        return <span>{fieldContent}</span>;
+    }
   }
 }

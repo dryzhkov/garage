@@ -1,13 +1,12 @@
 import {observable} from 'mobx';
-import * as cuid from 'cuid';
 
 export default class ReminderModel {
   public id: string;
   @observable public date: Date;
   @observable public notes: string;
 
-  constructor(date: Date, notes: string) {
-    this.id = cuid();
+  constructor(id: string, date: Date, notes: string) {
+    this.id = id;
     this.date = date;
     this.notes = notes;
   }

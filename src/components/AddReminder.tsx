@@ -73,7 +73,7 @@ export class AddReminder extends React.Component<AddReminderProps, {}> {
 
   addReminder = () => {
     if (this.selectedDate && this.notes && this.notes.length > 0) {
-      this.props.selectedVehicle!.addReminder(new ReminderModel(this.selectedDate, this.notes))
+      this.props.selectedVehicle!.addReminder(this.selectedDate, this.notes);
       this.clear();
       this.props.onAdd();
     }

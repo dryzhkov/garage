@@ -90,7 +90,7 @@ export class AddServiceRecord extends React.Component<AddServiceRecordProps, {}>
 
       this.props
         .selectedVehicle!
-        .addServiceRecord(new ServiceRecordModel(this.selectedDate, this.title, this.description))
+        .addServiceRecord(this.selectedDate, this.title, this.description)
       this.clear();
       this.props.onAdd();
     }

@@ -1,5 +1,4 @@
 import {observable} from 'mobx';
-import * as cuid from 'cuid';
 
 export default class ServiceRecordModel {
   public id: string;
@@ -7,8 +6,8 @@ export default class ServiceRecordModel {
   @observable public title: string;
   @observable public description: string;
 
-  constructor(date: Date, title: string, description: string = '') {
-    this.id = cuid();
+  constructor(id: string, date: Date, title: string, description: string = '') {
+    this.id = id;
     this.date = date;
     this.title = title;
     this.description = description;

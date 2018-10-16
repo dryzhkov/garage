@@ -1,9 +1,7 @@
 var path = require('path');
-var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'none',
   entry: [
     './src/index'
   ],
@@ -15,16 +13,6 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx']
   },
   module: {
-    // rules: [{
-    //   test: /\.tsx?$/,
-    //   use: [
-    //     {
-    //       loader: "awesome-typescript-loader"
-    //     }
-    //   ],
-    //   exclude: /node_modules/,
-    //   // include: path.join(__dirname, 'src')
-    // }]
     rules: [
       {
         test: /\.tsx?$/,
@@ -38,6 +26,6 @@ module.exports = {
         hash: false,
         template: './src/index.html',
         filename: './index.html'
-    })
+    }),
   ]
 };

@@ -6,13 +6,14 @@ const { makeExecutableSchema } = require('graphql-tools');
 const cors = require('cors');
 const typeDefs = require('./graphql/type-defs');
 const resolvers = require('./graphql/resolvers');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 
 const HOME_PATH = '/graphiql';
 const URL = 'http://localhost';
-const PORT = 3000;
+const PORT = 3002;
 
 const start = () => {
   mongo.connect();
@@ -22,7 +23,7 @@ const start = () => {
     resolvers
   });
 
-  app.use(express.static('public'));
+  app.use(express.static(path.join(__dirname, 'public')));
   app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
   app.use(HOME_PATH, graphiqlExpress({
     endpointURL: '/graphql'
@@ -32,7 +33,7 @@ const start = () => {
   //   res.sendFile(__dirname + '/public/index.html');
   // });
 
-  app.get('/', (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(__dirname + '/public/index.html', { root: global });
   });
 

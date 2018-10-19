@@ -60,7 +60,7 @@ export class Garage extends React.Component<GarageProps, {}> {
               disabled={!this.selectedVehicle}
               onClick={this.addReminder}
               iconProps={{ iconName: 'Clock' }}
-              text="Add Reminder"
+              text="New Reminder"
               style={styles.actionButton}
             />
 
@@ -68,16 +68,16 @@ export class Garage extends React.Component<GarageProps, {}> {
               disabled={!this.selectedVehicle}
               onClick={this.addServiceRecord}
               iconProps={{ iconName: 'Add' }}
-              text="Add Service Record"
+              text="New Service Record"
               style={styles.actionButton}
             />
 
-            <CommandBarButton
+            {/* <CommandBarButton
               text="Add Vehicle"
               onClick={this.addVehicle}
               iconProps={{ iconName: 'Car' }}
               style={styles.actionButton}
-            />
+            /> */}
 
             <AddReminder
               selectedVehicle={this.selectedVehicle}

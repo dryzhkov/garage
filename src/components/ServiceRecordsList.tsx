@@ -57,7 +57,8 @@ export class ServiceRecordsList extends React.Component<ServiceRecordsListProps,
   }
   render() {
     const { selectedVehicle } = this.props;
-    const listItems = selectedVehicle.serviceRecords.map(record => {
+    const sortedRecords = selectedVehicle.serviceRecords.sort((a: ServiceRecordModel, b: ServiceRecordModel) => b.date.getTime() - a.date.getTime());
+    const listItems = sortedRecords.map(record => {
       return {
         key: record.id,
         date: record.date.toDateString(),

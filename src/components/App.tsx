@@ -10,6 +10,7 @@ import { Garage } from "./Garage";
 import { Callback } from "./Callback";
 import Auth from "../auth/Auth";
 import Login from "./Login";
+import Nav from "./Nav";
 
 export class App extends React.Component<{}, {}> {
   private store: GarageModel;
@@ -30,6 +31,7 @@ export class App extends React.Component<{}, {}> {
     return (
       <Provider store={this.store}>
         <Fabric>
+          <Nav auth={this.auth} />
           <Route
             path="/"
             exact

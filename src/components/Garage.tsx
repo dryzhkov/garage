@@ -1,10 +1,7 @@
 import * as React from "react";
 import { action, observable, runInAction } from "mobx";
 import { observer, inject } from "mobx-react";
-import {
-  CommandBarButton,
-  DefaultButton
-} from "office-ui-fabric-react/lib/Button";
+import { CommandBarButton } from "office-ui-fabric-react/lib/Button";
 import GarageModel from "../models/GarageModel";
 import VehicleModel from "../models/VehicleModel";
 import { RemindersList } from "./RemindersList";
@@ -70,66 +67,56 @@ export class Garage extends React.Component<GarageProps, {}> {
     }
 
     return (
-      <React.Fragment>
-        <div style={styles.header}>
-          <h1>My Garage</h1>
-          <DefaultButton onClick={this.props.auth.logout}>
-            Log out
-          </DefaultButton>
+      <div style={styles.container}>
+        <div style={styles.left}>
+          <Pivot
+            linkSize={PivotLinkSize.large}
+            onLinkClick={this.vehicleChanged}
+          >
+            {vehicleLinks}
+          </Pivot>
+          {reminders}
+          {serviceRecords}
         </div>
-        <div style={styles.headerBorder} />
+        <div style={styles.right}>
+          <CommandBarButton
+            disabled={!this.selectedVehicle}
+            onClick={this.addReminder}
+            iconProps={{ iconName: "Clock" }}
+            text="New Reminder"
+            style={styles.actionButton}
+          />
 
-        <div style={styles.container}>
-          <div style={styles.left}>
-            <Pivot
-              linkSize={PivotLinkSize.large}
-              onLinkClick={this.vehicleChanged}
-            >
-              {vehicleLinks}
-            </Pivot>
-            {reminders}
-            {serviceRecords}
-          </div>
-          <div style={styles.right}>
-            <CommandBarButton
-              disabled={!this.selectedVehicle}
-              onClick={this.addReminder}
-              iconProps={{ iconName: "Clock" }}
-              text="New Reminder"
-              style={styles.actionButton}
-            />
+          <CommandBarButton
+            disabled={!this.selectedVehicle}
+            onClick={this.addServiceRecord}
+            iconProps={{ iconName: "Add" }}
+            text="New Service Record"
+            style={styles.actionButton}
+          />
 
-            <CommandBarButton
-              disabled={!this.selectedVehicle}
-              onClick={this.addServiceRecord}
-              iconProps={{ iconName: "Add" }}
-              text="New Service Record"
-              style={styles.actionButton}
-            />
-
-            {/* <CommandBarButton
+          {/* <CommandBarButton
               text="Add Vehicle"
               onClick={this.addVehicle}
               iconProps={{ iconName: 'Car' }}
               style={styles.actionButton}
             /> */}
 
-            <AddReminder
-              selectedVehicle={this.selectedVehicle}
-              visible={this.addReminderVisible}
-              onAdd={this.closeAddReminder}
-              onClose={this.closeAddReminder}
-            />
+          <AddReminder
+            selectedVehicle={this.selectedVehicle}
+            visible={this.addReminderVisible}
+            onAdd={this.closeAddReminder}
+            onClose={this.closeAddReminder}
+          />
 
-            <AddServiceRecord
-              selectedVehicle={this.selectedVehicle}
-              visible={this.addServiceRecordVisible}
-              onAdd={this.closeAddServiceRecord}
-              onClose={this.closeAddServiceRecord}
-            />
-          </div>
+          <AddServiceRecord
+            selectedVehicle={this.selectedVehicle}
+            visible={this.addServiceRecordVisible}
+            onAdd={this.closeAddServiceRecord}
+            onClose={this.closeAddServiceRecord}
+          />
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 

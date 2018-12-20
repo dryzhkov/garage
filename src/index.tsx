@@ -1,24 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'mobx-react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import DevTools from 'mobx-react-devtools';
-import GarageModel from './models/GarageModel';
-import { Garage } from './components/Garage';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-
-const store = new GarageModel();
-store.fetchVehicles();
-// pull in office ui fabric icons
-initializeIcons();
+import { App } from './components/App';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <div>
+  <Router>
+    <React.Fragment>
+      <Route component={App}></Route>
       <DevTools />
-      <Garage />
-    </div>
-  </Provider>,
+    </React.Fragment>
+  </Router>,
   document.getElementById('root'));
-
-// playing around in the console
-(window as any).store = store;

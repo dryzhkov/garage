@@ -4,3 +4,5 @@ static/bundle.js
 server/env/
 server/public/
 .DS_Store
+.env-dev
+.env-prod

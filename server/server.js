@@ -8,6 +8,8 @@ const typeDefs = require("./graphql/type-defs");
 const resolvers = require("./graphql/resolvers");
 const path = require("path");
 
+require("dotenv").config({ path: "./.env-dev" }); // CHANGE THIS TO ./.env-prod
+
 const app = express();
 app.use(cors());
 
@@ -17,16 +19,15 @@ const PORT = 3002;
 
 var jwt = require("express-jwt");
 var jwks = require("jwks-rsa");
-
 var jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: "https://dimaryz-dev.auth0.com/.well-known/jwks.json"
+    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
   }),
-  audience: "http://localhost:3002",
-  issuer: "https://dimaryz-dev.auth0.com/",
+  audience: process.env.AUDIENCE,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
   algorithms: ["RS256"]
 });
 

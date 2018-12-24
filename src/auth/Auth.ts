@@ -7,10 +7,10 @@ export default class Auth {
   constructor(history) {
     this.history = history;
     this.auth0 = new auth0.WebAuth({
-      domain: "dimaryz-dev.auth0.com", // process.env.REACT_APP_AUTH0_DOMAIN,
-      clientID: "W4dEZiCY6QVgEy8vx1Gy9WGTeKB48b2p", // process.env.REACT_APP_AUTH0_CLIENT_ID,
-      redirectUri: "http://localhost:3002/callback", // process.env.REACT_APP_AUTH0_REDIRECT_URL,
-      audience: "http://localhost:3002",
+      domain: process.env.AUTH0_DOMAIN,
+      clientID: process.env.AUTH0_CLIENT_ID,
+      redirectUri: process.env.AUTH0_REDIRECT_URL,
+      audience: process.env.AUTH0_AUDIENCE,
       responseType: "token id_token",
       scope: "openid profile email"
     });
@@ -52,8 +52,8 @@ export default class Auth {
     window.localStorage.removeItem("access_token");
     window.localStorage.removeItem("expires_at");
     this.auth0.logout({
-      clientID: "W4dEZiCY6QVgEy8vx1Gy9WGTeKB48b2p",
-      returnTo: "http://localhost:3002"
+      clientID: process.env.AUTH0_CLIENT_ID,
+      returnTo: process.env.AUTH0_LOGOUT_RETURN_URL
     });
   };
 }

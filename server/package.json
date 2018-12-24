@@ -9,5 +9,8 @@
     "graphql-tools": "^4.0.0",
     "mongoose": "^5.3.2",
     "nodemon": "^1.18.4"
+  },
+  "devDependencies": {
+    "dotenv": "^6.2.0"
   }
 }

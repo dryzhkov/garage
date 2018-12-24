@@ -19,6 +19,9 @@ export class App extends React.Component<{}, {}> {
   }
 
   render() {
+    console.log(process.env.AUTH0_DOMAIN);
+    console.log(process.env.AUTH0_CLIENT_ID);
+    console.log(process.env.AUTH0_DOMAIN);
     return (
       <Fabric>
         <Nav auth={this.auth} />

@@ -15,6 +15,21 @@ const HOME_PATH = "/graphiql";
 const URL = "http://localhost";
 const PORT = 3002;
 
+var jwt = require("express-jwt");
+var jwks = require("jwks-rsa");
+
+var jwtCheck = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: "https://dimaryz-dev.auth0.com/.well-known/jwks.json"
+  }),
+  audience: "http://localhost:3002",
+  issuer: "https://dimaryz-dev.auth0.com/",
+  algorithms: ["RS256"]
+});
+
 const start = () => {
   mongo.connect();
 
@@ -24,7 +39,7 @@ const start = () => {
   });
 
   app.use(express.static(path.join(__dirname, "public")));
-  app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));
+  app.use("/graphql", jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
   app.use(
     HOME_PATH,
     graphiqlExpress({

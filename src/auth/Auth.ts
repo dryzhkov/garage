@@ -10,6 +10,7 @@ export default class Auth {
       domain: "dimaryz-dev.auth0.com", // process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: "W4dEZiCY6QVgEy8vx1Gy9WGTeKB48b2p", // process.env.REACT_APP_AUTH0_CLIENT_ID,
       redirectUri: "http://localhost:3002/callback", // process.env.REACT_APP_AUTH0_REDIRECT_URL,
+      audience: "http://localhost:3002",
       responseType: "token id_token",
       scope: "openid profile email"
     });
@@ -56,3 +57,14 @@ export default class Auth {
     });
   };
 }
+
+const getAccessToken = () => {
+  const accessToken = window.localStorage.getItem("access_token");
+
+  if (!accessToken) {
+    return "";
+  }
+  return accessToken;
+};
+
+export { getAccessToken };

@@ -20,7 +20,10 @@ export class App extends React.Component<{}, {}> {
 
     this.auth = new Auth(props.history);
     this.store = new GarageModel();
-    this.store.fetchVehicles();
+    if (this.auth.isAuthenticated()) {
+      this.store.fetchVehicles();
+    }
+
     // pull in office ui fabric icons
     initializeIcons();
     // playing around in the console

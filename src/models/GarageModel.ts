@@ -1,9 +1,9 @@
-import { observable, action, runInAction } from 'mobx';
-import VehicleModel from './VehicleModel';
-import gql from 'graphql-tag';
-import client from '../graphql/client';
-import ReminderModel from './ReminderModel';
-import ServiceRecordModel from './ServiceRecordModel';
+import { observable, action, runInAction } from "mobx";
+import VehicleModel from "./VehicleModel";
+import gql from "graphql-tag";
+import client from "../graphql/client";
+import ReminderModel from "./ReminderModel";
+import ServiceRecordModel from "./ServiceRecordModel";
 
 export default class GarageModel {
   @observable public vehicles: VehicleModel[] = [];
@@ -18,13 +18,13 @@ export default class GarageModel {
       query {
         vehicles {
           id
-          make,
+          make
           serviceRecords {
             id
             date
             title
             description
-          },
+          }
           reminders {
             id
             date
@@ -34,9 +34,9 @@ export default class GarageModel {
       }
     `;
     try {
-      const vehiclesDto = await client
+      const vehiclesDto = await client()
         .query({ query: getVehiclesQuery })
-        .then((res) => {
+        .then(res => {
           return res.data["vehicles"];
         });
       // after await, modifying state again, needs an actions:
@@ -47,7 +47,12 @@ export default class GarageModel {
           });
 
           const serviceRecords = dto.serviceRecords.map(sr => {
-            return new ServiceRecordModel(sr.id, new Date(parseInt(sr.date)), sr.title, sr.description);
+            return new ServiceRecordModel(
+              sr.id,
+              new Date(parseInt(sr.date)),
+              sr.title,
+              sr.description
+            );
           });
 
           return new VehicleModel(dto.id, dto.make, reminders, serviceRecords);
@@ -56,7 +61,7 @@ export default class GarageModel {
     } catch (error) {
       runInAction(() => {
         console.log(error);
-      })
+      });
     }
   }
 }

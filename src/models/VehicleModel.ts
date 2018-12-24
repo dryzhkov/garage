@@ -1,8 +1,8 @@
-import { observable, action, computed, runInAction } from 'mobx';
-import ServiceRecordModel from './ServiceRecordModel';
-import ReminderModel from './ReminderModel';
-import gql from 'graphql-tag';
-import client from '../graphql/client';
+import { observable, action, computed, runInAction } from "mobx";
+import ServiceRecordModel from "./ServiceRecordModel";
+import ReminderModel from "./ReminderModel";
+import gql from "graphql-tag";
+import client from "../graphql/client";
 
 export default class VehicleModel {
   public id: string;
@@ -10,7 +10,12 @@ export default class VehicleModel {
   @observable public serviceRecords: ServiceRecordModel[];
   @observable public reminders: ReminderModel[];
 
-  constructor(id: string, make: string, reminders: ReminderModel[] = [], serviceRecords: ServiceRecordModel[] = []) {
+  constructor(
+    id: string,
+    make: string,
+    reminders: ReminderModel[] = [],
+    serviceRecords: ServiceRecordModel[] = []
+  ) {
     this.id = id;
     this.make = make;
     this.reminders = reminders;
@@ -23,7 +28,11 @@ export default class VehicleModel {
   }
 
   @action
-  public async addServiceRecord(date: Date, title: string, description: string = "") {
+  public async addServiceRecord(
+    date: Date,
+    title: string,
+    description: string = ""
+  ) {
     const mutation = gql`
       mutation{
         createServiceRecord(
@@ -40,15 +49,20 @@ export default class VehicleModel {
       }
     `;
 
-    const dto = await client
+    const dto = await client()
       .mutate({ mutation: mutation })
-      .then((res) => {
+      .then(res => {
         return res.data.createServiceRecord;
       });
     runInAction(() => {
       this.serviceRecords.push(
-        new ServiceRecordModel(dto.id, new Date(parseInt(dto.date)), dto.title, dto.description
-      ));
+        new ServiceRecordModel(
+          dto.id,
+          new Date(parseInt(dto.date)),
+          dto.title,
+          dto.description
+        )
+      );
     });
   }
 
@@ -68,13 +82,15 @@ export default class VehicleModel {
       }
     `;
 
-    const dto = await client
+    const dto = await client()
       .mutate({ mutation: mutation })
-      .then((res) => {
+      .then(res => {
         return res.data.createReminder;
       });
     runInAction(() => {
-      this.reminders.push(new ReminderModel(dto.id, new Date(parseInt(dto.date)), dto.notes));
+      this.reminders.push(
+        new ReminderModel(dto.id, new Date(parseInt(dto.date)), dto.notes)
+      );
     });
   }
 
@@ -89,15 +105,17 @@ export default class VehicleModel {
       }
     `;
 
-    const deletedId = await client
+    const deletedId = await client()
       .mutate({ mutation: mutation })
-      .then((res) => {
+      .then(res => {
         return res.data.deleteServiceRecord;
       });
 
     if (deletedId) {
       runInAction(() => {
-        this.serviceRecords = this.serviceRecords.filter(sr => sr.id !== deletedId);
+        this.serviceRecords = this.serviceRecords.filter(
+          sr => sr.id !== deletedId
+        );
       });
     }
   }
@@ -113,9 +131,9 @@ export default class VehicleModel {
       }
     `;
 
-    const deletedId = await client
+    const deletedId = await client()
       .mutate({ mutation: mutation })
-      .then((res) => {
+      .then(res => {
         return res.data.deleteReminder;
       });
 

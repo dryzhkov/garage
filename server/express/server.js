@@ -9,7 +9,7 @@ const typeDefs = require('../graphql/type-defs');
 const resolvers = require('../graphql/resolvers');
 const path = require('path');
 
-require('dotenv').config({ path: './.env' });
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -35,7 +35,7 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use('/graphql', jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
 app.use(
   '/graphiql',
@@ -45,11 +45,11 @@ app.use(
 );
 
 app.get('/callback', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '../public/index.html');
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '../public/index.html');
 });
 
 process.on('unHandledRejection', (err) => {

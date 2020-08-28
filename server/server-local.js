@@ -1,6 +1,6 @@
 'use strict';
 
-const app = require('./server');
+const app = require('./express/server');
 const URL = 'http://localhost';
 const PORT = 3000;
 

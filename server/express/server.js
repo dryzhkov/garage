@@ -1,12 +1,12 @@
-const mongo = require('./db/mongo');
+const mongo = require('../db/mongo');
 const express = require('express');
 const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const cors = require('cors');
-const typeDefs = require('./graphql/type-defs');
-const resolvers = require('./graphql/resolvers');
+const typeDefs = require('../graphql/type-defs');
+const resolvers = require('../graphql/resolvers');
 const path = require('path');
 
 require('dotenv').config({ path: './.env' });

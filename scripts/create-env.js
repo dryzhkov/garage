@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 try {
-  if (fs.existsSync('./.evn')) {
+  if (fs.existsSync('./.env')) {
     console.log('.env file already exists. will exit now.');
     process.exit(0);
   } else {

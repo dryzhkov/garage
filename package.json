@@ -4,9 +4,9 @@
   "description": "Simple app for keeping track of vechicle maintenance records",
   "scripts": {
     "start": "npm run build-dev; npm run server",
-    "server": "nodemon server/server.js",
-    "build-dev": "webpack --config webpack.dev.js",
-    "build-prod": "webpack --config webpack.prod.js"
+    "server": "node server/server.js",
+    "build:dev": "webpack --config webpack.dev.js",
+    "build:prod": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",

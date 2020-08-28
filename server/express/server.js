@@ -45,11 +45,11 @@ app.use(
 );
 
 app.get('/callback', (req, res) => {
-  res.sendFile(__dirname + '../public/index.html');
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '../public/index.html');
+  res.sendFile(path.join(__dirname + '../public/index.html'));
 });
 
 process.on('unHandledRejection', (err) => {

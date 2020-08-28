@@ -1,5 +1,6 @@
 const mongo = require('./db/mongo');
 const express = require('express');
+const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
@@ -12,10 +13,6 @@ require('dotenv').config({ path: './.env' });
 
 const app = express();
 app.use(cors());
-
-const HOME_PATH = '/graphiql';
-const URL = 'http://localhost';
-const PORT = 3002;
 
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
@@ -31,36 +28,29 @@ const jwtCheck = jwt({
   algorithms: ['RS256'],
 });
 
-const start = () => {
-  mongo.connect();
+mongo.connect();
 
-  const schema = makeExecutableSchema({
-    typeDefs,
-    resolvers,
-  });
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
 
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use('/graphql', jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
-  app.use(
-    HOME_PATH,
-    graphiqlExpress({
-      endpointURL: '/graphql',
-    })
-  );
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/graphql', jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
+app.use(
+  '/graphiql',
+  graphiqlExpress({
+    endpointURL: '/graphql',
+  })
+);
 
-  app.get('/callback', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-  });
+app.get('/callback', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
 
-  app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-  });
-
-  app.listen(PORT, () => {
-    console.log(`Go to ${URL}:${PORT}${HOME_PATH} for GraphQL endpoint`);
-    console.log(`Go to ${URL}:${PORT} for front-end website`);
-  });
-};
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
 
 process.on('unHandledRejection', (err) => {
   if (err) {
@@ -69,4 +59,5 @@ process.on('unHandledRejection', (err) => {
   }
 });
 
-start();
+module.exports = app;
+module.exports.handler = serverless(app);

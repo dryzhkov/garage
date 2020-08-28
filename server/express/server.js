@@ -49,7 +49,7 @@ app.get('/callback', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname + '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 process.on('unHandledRejection', (err) => {

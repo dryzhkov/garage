@@ -1,13 +1,12 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Route } from "react-router-dom";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
-import { Fabric } from "office-ui-fabric-react/lib/Fabric";
-import { Garage } from "./Garage";
-import { Callback } from "./Callback";
-import Auth from "../auth/Auth";
-import Login from "./Login";
-import Nav from "./Nav";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Route } from 'react-router-dom';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+import { Garage } from './Garage';
+import Auth from '../auth/Auth';
+import Login from './Login';
+import Nav from './Nav';
 
 export class App extends React.Component<{}, {}> {
   private auth: Auth;
@@ -25,15 +24,11 @@ export class App extends React.Component<{}, {}> {
         <Route
           path="/"
           exact
-          render={props => <Garage auth={this.auth} {...props} />}
-        />
-        <Route
-          path="/callback"
-          render={props => <Callback auth={this.auth} {...props} />}
+          render={(props) => <Garage auth={this.auth} {...props} />}
         />
         <Route
           path="/login"
-          render={props => <Login auth={this.auth} {...props} />}
+          render={(props) => <Login auth={this.auth} {...props} />}
         />
       </Fabric>
     );

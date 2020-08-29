@@ -8,7 +8,6 @@ const cors = require('cors');
 const typeDefs = require('../graphql/type-defs');
 const resolvers = require('../graphql/resolvers');
 const path = require('path');
-const fs = require('fs');
 const url = require('url');
 
 require('dotenv').config();
@@ -62,30 +61,6 @@ app.get(`${baseUrlPath}/callback`, (req, res) => {
       query: req.query,
     })
   );
-});
-
-app.get(`${baseUrlPath}/ls`, (req, res) => {
-  const files = tryToRead('.');
-  const files2 = tryToRead('..');
-  const files3 = tryToRead('/src');
-  res.json({
-    currentDir: files,
-    parentDir: files2,
-    srcDir: files3,
-    indexPath: path.resolve(__dirname, '../public/index.html'),
-  });
-});
-
-function tryToRead(path) {
-  try {
-    return fs.readdirSync(path);
-  } catch (e) {
-    return [];
-  }
-}
-
-app.get(`${baseUrlPath}/login`, (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
 process.on('unHandledRejection', (err) => {

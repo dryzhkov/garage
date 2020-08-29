@@ -31,6 +31,10 @@ const jwtCheck = jwt({
 
 mongo.connect();
 
+const routerBasePath =
+  process.env.NODE_ENV === 'dev' ? '/server' : './netlify/functions/server';
+const router = express.Router();
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -45,11 +49,11 @@ app.use(
   })
 );
 
-app.get('/callback', (req, res) => {
+router.get('/callback', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
-app.get('/ls', (req, res) => {
+router.get('/ls', (req, res) => {
   const files = fs.readdirSync('.');
   const serverFiles = fs.readdirSync('./server');
   res.json({
@@ -60,9 +64,11 @@ app.get('/ls', (req, res) => {
   });
 });
 
-app.get('/login', (req, res) => {
+router.get('/login', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
+
+app.use(routerBasePath, router);
 
 process.on('unHandledRejection', (err) => {
   if (err) {

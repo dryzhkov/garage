@@ -8,7 +8,10 @@ let _client = null;
 const client = () => {
   if (!_client) {
     const httpLink = new HttpLink({
-      uri: '/.netlify/functions/server/graphql',
+      uri:
+        process.env.NODE_ENV === 'dev'
+          ? '/graphql'
+          : '/.netlify/functions/server/graphql',
       headers: {
         authorization: `Bearer ${getAccessToken()}`,
       },

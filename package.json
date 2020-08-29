@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Simple app for keeping track of vechicle maintenance records",
   "scripts": {
-    "start": "npm run build:dev; npm run server",
+    "start": "cross-env NODE_ENV=dev npm-run-all build:dev server",
     "server": "nodemon server/server-local.js",
     "build:dev": "webpack --config webpack.dev.js",
     "build:prod": "node ./scripts/create-env.js; webpack --config webpack.prod.js; cd server; yarn install"
@@ -44,6 +44,7 @@
     "@types/react-router-dom": "^4.3.1",
     "auth0-js": "9.8.0",
     "auth0-lock": "11.10.0",
+    "cross-env": "^7.0.2",
     "cuid": "^2.1.4",
     "express": "4.16.3",
     "express-jwt": "5.3.1",
@@ -52,7 +53,7 @@
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
     "mobx-react-devtools": "^6.0.3",
-    "npm-run-all": "4.1.3",
+    "npm-run-all": "^4.1.5",
     "office-ui-fabric-react": "^6.79.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",

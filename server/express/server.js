@@ -58,9 +58,9 @@ app.get(`${baseUrlPath}/callback`, (req, res) => {
 });
 
 app.get(`${baseUrlPath}/ls`, (req, res) => {
-  const files = fs.readdirSync('.');
-  const files2 = fs.readdirSync('..');
-  const files3 = fs.readdirSync('/src');
+  const files = tryToRead('.');
+  const files2 = tryToRead('..');
+  const files3 = tryToRead('/src');
   res.json({
     currentDir: files,
     parentDir: files2,
@@ -68,6 +68,14 @@ app.get(`${baseUrlPath}/ls`, (req, res) => {
     indexPath: path.resolve(__dirname, '../public/index.html'),
   });
 });
+
+function tryToRead(path) {
+  try {
+    return fs.readdirSync(path);
+  } catch (e) {
+    return [];
+  }
+}
 
 app.get(`${baseUrlPath}/login`, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));

@@ -45,7 +45,7 @@
     "@types/react-router": "^4.4.3",
     "@types/react-router-dom": "^4.3.1",
     "auth0-js": "9.8.0",
-    "auth0-lock": "11.10.0",
+    "auth0-lock": "11.26.0",
     "cuid": "^2.1.4",
     "express": "4.16.3",
     "express-jwt": "5.3.1",

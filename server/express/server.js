@@ -36,20 +36,28 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
+const baseUrlPath =
+  process.env.NODE_ENV === 'dev' ? '' : '/.netlify/functions/server';
+
 app.use(express.static(path.join(__dirname, '../public')));
-app.use('/graphql', jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
 app.use(
-  '/graphiql',
+  `${baseUrlPath}/graphql`,
+  jwtCheck,
+  bodyParser.json(),
+  graphqlExpress({ schema })
+);
+app.use(
+  `${baseUrlPath}/graphiql`,
   graphiqlExpress({
     endpointURL: '/graphql',
   })
 );
 
-app.get('/callback', (req, res) => {
+app.get(`${baseUrlPath}/callback`, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
-app.get('/.netlify/functions/server/ls', (req, res) => {
+app.get(`${baseUrlPath}/ls`, (req, res) => {
   const files = fs.readdirSync('.');
   res.json({
     currentDir: files,
@@ -58,7 +66,7 @@ app.get('/.netlify/functions/server/ls', (req, res) => {
   });
 });
 
-app.get('/login', (req, res) => {
+app.get(`${baseUrlPath}/login`, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 

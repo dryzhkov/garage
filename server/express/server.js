@@ -59,10 +59,13 @@ app.get(`${baseUrlPath}/callback`, (req, res) => {
 
 app.get(`${baseUrlPath}/ls`, (req, res) => {
   const files = fs.readdirSync('.');
+  const files2 = fs.readdirSync('..');
+  const files3 = fs.readdirSync('/src');
   res.json({
     currentDir: files,
+    parentDir: files2,
+    srcDir: files3,
     indexPath: path.resolve(__dirname, '../public/index.html'),
-    indexPath2: path.join(__dirname, '../public/index.html'),
   });
 });
 

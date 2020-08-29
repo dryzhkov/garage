@@ -51,10 +51,8 @@ app.get('/callback', (req, res) => {
 
 app.get('/.netlify/functions/server/ls', (req, res) => {
   const files = fs.readdirSync('.');
-  const serverFiles = fs.readdirSync('./server');
   res.json({
     currentDir: files,
-    serverDir: serverFiles,
     indexPath: path.resolve(__dirname, '../public/index.html'),
     indexPath2: path.join(__dirname, '../public/index.html'),
   });

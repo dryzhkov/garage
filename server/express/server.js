@@ -36,20 +36,21 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-app.use(express.static(path.join(__dirname, '../public')));
-app.use('/graphql', jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
-app.use(
-  '/graphiql',
-  graphiqlExpress({
-    endpointURL: '/graphql',
-  })
-);
+// app.use(express.static(path.join(__dirname, '../public')));
+// app.use('/graphql', jwtCheck, bodyParser.json(), graphqlExpress({ schema }));
+// app.use(
+//   '/graphiql',
+//   graphiqlExpress({
+//     endpointURL: '/graphql',
+//   })
+// );
+app.get('/', (req, res) => res.json({ message: 'Hello' }));
 
-app.use('/callback', (req, res) => {
+app.get('/callback', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
-app.use('/ls', (req, res) => {
+app.get('/ls', (req, res) => {
   const files = fs.readdirSync('.');
   const serverFiles = fs.readdirSync('./server');
   res.json({
@@ -60,7 +61,7 @@ app.use('/ls', (req, res) => {
   });
 });
 
-app.use('/login', (req, res) => {
+app.get('/login', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 

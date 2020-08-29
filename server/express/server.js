@@ -54,7 +54,13 @@ app.use(
 );
 
 app.get(`${baseUrlPath}/callback`, (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/index.html'));
+  // res.sendFile(path.resolve(__dirname, '../public/index.html'));
+  res.redirect(
+    url.format({
+      pathname: '/',
+      query: req.query,
+    })
+  );
 });
 
 app.get(`${baseUrlPath}/ls`, (req, res) => {

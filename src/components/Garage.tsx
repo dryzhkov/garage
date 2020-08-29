@@ -1,27 +1,28 @@
-import * as React from "react";
-import { action, observable, runInAction } from "mobx";
-import { observer, inject } from "mobx-react";
-import { CommandBarButton } from "office-ui-fabric-react/lib/Button";
-import GarageModel from "../models/GarageModel";
-import VehicleModel from "../models/VehicleModel";
-import { RemindersList } from "./RemindersList";
-import { ServiceRecordsList } from "./ServiceRecordsList";
-import { AddReminder } from "./AddReminder";
-import { Provider } from "mobx-react";
+import * as React from 'react';
+import { action, observable, runInAction } from 'mobx';
+import { observer, inject } from 'mobx-react';
+import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import GarageModel from '../models/GarageModel';
+import VehicleModel from '../models/VehicleModel';
+import { RemindersList } from './RemindersList';
+import { ServiceRecordsList } from './ServiceRecordsList';
+import { AddReminder } from './AddReminder';
+import { Provider } from 'mobx-react';
 import {
   Pivot,
   PivotItem,
-  PivotLinkSize
-} from "office-ui-fabric-react/lib/Pivot";
-import { AddServiceRecord } from "./AddServiceRecord";
-import styles from "../styles.css.js";
-import * as H from "history";
-import Auth from "../auth/Auth";
-import { Redirect } from "react-router";
+  PivotLinkSize,
+} from 'office-ui-fabric-react/lib/Pivot';
+import { AddServiceRecord } from './AddServiceRecord';
+import styles from '../styles.css.js';
+import * as H from 'history';
+import Auth from '../auth/Auth';
+import { Redirect } from 'react-router';
 
 interface GarageProps {
   auth: Auth;
   history: H.History;
+  location?: any;
 }
 
 @observer
@@ -40,6 +41,9 @@ export class Garage extends React.Component<GarageProps, {}> {
   }
 
   componentWillMount() {
+    if (/access_token|id_token|error/.test(this.props.location.hash)) {
+      this.props.auth.handleAuthentication();
+    }
     if (this.props.auth.isAuthenticated()) {
       this.store.fetchVehicles();
     }
@@ -52,7 +56,7 @@ export class Garage extends React.Component<GarageProps, {}> {
       });
     }
 
-    const vehicleLinks = this.store.vehicles.map(vehicle => {
+    const vehicleLinks = this.store.vehicles.map((vehicle) => {
       return (
         <PivotItem
           key={vehicle.id}
@@ -91,7 +95,7 @@ export class Garage extends React.Component<GarageProps, {}> {
             <CommandBarButton
               disabled={!this.selectedVehicle}
               onClick={this.addReminder}
-              iconProps={{ iconName: "Clock" }}
+              iconProps={{ iconName: 'Clock' }}
               text="New Reminder"
               style={styles.actionButton}
             />
@@ -99,7 +103,7 @@ export class Garage extends React.Component<GarageProps, {}> {
             <CommandBarButton
               disabled={!this.selectedVehicle}
               onClick={this.addServiceRecord}
-              iconProps={{ iconName: "Add" }}
+              iconProps={{ iconName: 'Add' }}
               text="New Service Record"
               style={styles.actionButton}
             />
@@ -161,7 +165,7 @@ export class Garage extends React.Component<GarageProps, {}> {
 
   @action
   vehicleChanged = (item: PivotItem): void => {
-    this.selectedVehicle = this.store.vehicles.find(vehicle => {
+    this.selectedVehicle = this.store.vehicles.find((vehicle) => {
       return vehicle.id === item.props.itemKey;
     });
   };

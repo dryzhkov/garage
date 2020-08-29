@@ -8,6 +8,7 @@ const cors = require('cors');
 const typeDefs = require('../graphql/type-defs');
 const resolvers = require('../graphql/resolvers');
 const path = require('path');
+const fs = require('fs');
 
 require('dotenv').config();
 
@@ -46,6 +47,17 @@ app.use(
 
 app.get('/callback', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
+});
+
+app.get('/ls', (req, res) => {
+  const files = fs.readdirSync('.');
+  const serverFiles = fs.readdirSync('./server');
+  res.json({
+    currentDir: files,
+    serverDir: serverFiles,
+    indexPath: path.resolve(__dirname, '../public/index.html'),
+    indexPath2: path.join(__dirname, '../public/index.html'),
+  });
 });
 
 app.get('/login', (req, res) => {
